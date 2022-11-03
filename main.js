@@ -15,7 +15,7 @@
  * To make the second one happen, the number to change
  * is the first argument to `repeat`, currently set at 10.
  */
-const gridWidth = 10;
+const gridWidth = 10; //lookup CSS Grid!
 let count = 0;
 while (count <= gridWidth * gridWidth) {
   const canvas = document.querySelector('.canvas');
@@ -46,22 +46,74 @@ while (count <= gridWidth * gridWidth) {
  * QUERIES *
 ***********/
 
-// Add queries for all your squares, palette colors, and brush here.
-// (Note the singular or plural used in that sentence!)
 
+let paints = document.querySelectorAll(".paint .palette-color");
+let brush = document.querySelector(".current-brush");
+let grid = document.querySelectorAll(".square");
+let app = document.querySelector(".app");
 
+let isMouseDown = true;
 
 /****************************
  * EVENT LISTENER FUNCTIONS *
 ****************************/
 
-// Now add some functions to handle clicking one particular square
-// and clicking one particular palette color. You can leave them
-// empty at first, though a console.log just to know they're being
-// run as event listeners (after the next step is set up) isn't a
-// bad idea for testing purposes.
+//selects color of paint to use
+for(let i = 0; i< paints.length; i++){
+  paints[i].addEventListener("click", function(){
+    let oldColor = brush.classList[1];
+    let newColor = paints[i].classList[1];
+    brush.classList.replace(oldColor, newColor);
+  })}
 
 
+// changes canvas color for click events
+for(let square of grid){
+  square.addEventListener("click", function(){
+    // isMouseDown = false;
+    square.classList.replace(square.classList[1], brush.classList[1]);
+  })}
+
+    
+//changes color when click then drag for squares dragged over
+
+
+
+for(let square of grid){
+  app.addEventListener("mouseover", function(){
+    if (isMouseDown === false){
+      square.classList.replace(square.classList[1], brush.classList[1]);
+      console.log("We be dragging...")
+    }})}
+
+app.addEventListener("mousedown", function(){
+  isMouseDown = false
+  console.log(`isMouseDown: ${isMouseDown}`)
+
+  })
+
+
+
+app.addEventListener("mouseup", function(){
+  isMouseDown = true
+  console.log(`isMouseDown: ${isMouseDown}`)
+  })
+
+
+// if (mouseValue = true){
+//   for(let i = 0; i< gridSquare.length; i++){
+//       let gridClassList = gridSquare[i].classList
+//       gridClassList.replace(gridClassList[1], brushColor.classList[1]);
+//     }
+// }
+
+// for(let i = 0; i< gridDrag.length; i++){
+//   gridDrag[i].addEventListener("mouseenter", function(){
+//     let gridClassList = gridDrag[i].classList
+//     let oldColor = gridClassList[1];
+//     let newColor = brushColor.classList[1];
+//     gridClassList.replace(oldColor, newColor);
+//     })}
 
 /**************************
  * WIRING IT ALL TOGETHER *
@@ -71,3 +123,10 @@ while (count <= gridWidth * gridWidth) {
 // You'll need to add the appropriate event listener for each
 // square and for each palette color from the functions you
 // wrote above.
+
+
+
+function paintDrag(){
+
+
+}
