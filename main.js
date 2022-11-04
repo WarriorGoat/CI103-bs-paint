@@ -15,7 +15,7 @@
  * To make the second one happen, the number to change
  * is the first argument to `repeat`, currently set at 10.
  */
-const gridWidth = 10; //lookup CSS Grid!
+const gridWidth = 50; //lookup CSS Grid!
 let count = 0;
 while (count <= gridWidth * gridWidth) {
   const canvas = document.querySelector('.canvas');
@@ -24,6 +24,18 @@ while (count <= gridWidth * gridWidth) {
   canvas.appendChild(div);
   count++;
 }
+
+//Add buttons for reset and night/day
+let brushArea = document.querySelector(".brush")
+let buttonReset = document.createElement('button')
+let buttonNight = document.createElement('button')
+buttonReset.className = "reset";
+buttonNight.className = "night";
+brushArea.appendChild(buttonReset);
+brushArea.appendChild(buttonNight);
+buttonReset.innerText = "Reset All";
+buttonNight.innerText = "Click for Night";
+
 
 // You probably should NOT do these in the order below.
 // That is, you probably should NOT do all the queries,
@@ -49,10 +61,11 @@ while (count <= gridWidth * gridWidth) {
 
 let paints = document.querySelectorAll(".paint .palette-color");
 let brush = document.querySelector(".current-brush");
-let grid = document.querySelectorAll(".square");
+let gridSquares = document.querySelectorAll(".square");
 let app = document.querySelector(".app");
-
-let isMouseDown = true;
+let head = document.querySelector(".headings")
+let message = document.querySelector(".message")
+let isMouseDown = false;
 
 /****************************
  * EVENT LISTENER FUNCTIONS *
@@ -68,52 +81,52 @@ for(let i = 0; i< paints.length; i++){
 
 
 // changes canvas color for click events
-for(let square of grid){
-  square.addEventListener("click", function(){
-    // isMouseDown = false;
-    square.classList.replace(square.classList[1], brush.classList[1]);
-  })}
-
+for(let i = 0; i<gridSquares.length; i++){
+  gridSquares[i].addEventListener("click", function(){
+    if (isMouseDown === false){
+      let oldColor = gridSquares[i].classList[1];
+      let newColor = brush.classList[1];
+      gridSquares[i].classList.replace(oldColor, newColor);
+}})}
+    
     
 //changes color when click then drag for squares dragged over
-
-
-
-for(let square of grid){
-  app.addEventListener("mouseover", function(){
-    if (isMouseDown === false){
-      square.classList.replace(square.classList[1], brush.classList[1]);
-      console.log("We be dragging...")
-    }})}
-
 app.addEventListener("mousedown", function(){
-  isMouseDown = false
-  console.log(`isMouseDown: ${isMouseDown}`)
-
-  })
-
-
+  isMouseDown = true;})
 
 app.addEventListener("mouseup", function(){
-  isMouseDown = true
-  console.log(`isMouseDown: ${isMouseDown}`)
-  })
+  isMouseDown = false;})
+
+for(let i = 0; i<gridSquares.length; i++){
+  gridSquares[i].addEventListener("mouseover", function(){
+    if (isMouseDown === true){
+      let oldColor = gridSquares[i].classList[1];
+      let newColor = brush.classList[1];
+      gridSquares[i].classList.replace(oldColor, newColor);
+    }})}
 
 
-// if (mouseValue = true){
-//   for(let i = 0; i< gridSquare.length; i++){
-//       let gridClassList = gridSquare[i].classList
-//       gridClassList.replace(gridClassList[1], brushColor.classList[1]);
-//     }
-// }
+//Reset Function
+for(let i = 0; i<gridSquares.length; i++){
+buttonReset.addEventListener("click", function(){
+    if (isMouseDown === false){
+      let oldColor = gridSquares[i].classList[1];
+      gridSquares[i].classList.replace(oldColor, "color-5");
+}})}
 
-// for(let i = 0; i< gridDrag.length; i++){
-//   gridDrag[i].addEventListener("mouseenter", function(){
-//     let gridClassList = gridDrag[i].classList
-//     let oldColor = gridClassList[1];
-//     let newColor = brushColor.classList[1];
-//     gridClassList.replace(oldColor, newColor);
-//     })}
+//Night/Day Function
+buttonNight.addEventListener("click", function(){
+  isMouseDown = false;
+  let background = app.classList;
+  background.toggle("app-night");
+  let heading = head.classList;
+  heading.toggle("headings-night");
+  if(buttonNight.innerText === "Click for Night"){
+    buttonNight.innerText = "Click for Day";
+  }else{
+  buttonNight.innerText = "Click for Night";
+  }
+})
 
 /**************************
  * WIRING IT ALL TOGETHER *
@@ -125,8 +138,3 @@ app.addEventListener("mouseup", function(){
 // wrote above.
 
 
-
-function paintDrag(){
-
-
-}
